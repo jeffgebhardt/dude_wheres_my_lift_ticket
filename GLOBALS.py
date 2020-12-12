@@ -13,3 +13,6 @@ IKON_LOGIN_PASSWORD = os.getenv('IKON_LOGIN_PASSWORD')
 # This is the driver that is used for Selenium and headless web browsing. The driver version must match your installed
 # version of Chrome.
 CHROME_DRIVER_LOCATION = './chrome_driver/chromedriver.exe'
+
+# How often in seconds to retry making a reservation
+RESERVATION_ATTEMPT_RETRY_INTERVAL_SECONDS = 10
