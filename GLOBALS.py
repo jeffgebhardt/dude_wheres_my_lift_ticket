@@ -16,3 +16,9 @@ CHROME_DRIVER_LOCATION = './chrome_driver/chromedriver.exe'
 
 # How often in seconds to retry making a reservation
 RESERVATION_ATTEMPT_RETRY_INTERVAL_SECONDS = 10
+
+# Twilio
+TWILIO_ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
+TWILIO_AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
+TWILIO_FROM_NUMBER = '+12058986998'
+TWILIO_TO_NUMBER = '=12539510119'

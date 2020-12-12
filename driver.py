@@ -1,8 +1,8 @@
 import time
-from logger import logger
 
+from logger import logger
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 
@@ -101,12 +101,33 @@ class Driver:
                 able_to_make_reservation = True
                 logger.info(f'Reservation available for "{self.reservation_date}", attempting to reserve day.')
                 day.click()
-                # Wait and then click save button. Use full class name!
+
+                # The day is now selected, we just need to save and complete the reservation.
+                self.complete_reservation()
+                self.driver.close()
+                return True
 
         if not able_to_make_reservation:
             logger.info(f'Reservation NOT available for "{self.reservation_date}", will try again in '
                         f'{RESERVATION_ATTEMPT_RETRY_INTERVAL_SECONDS} seconds.')
             return False
+
+    def complete_reservation(self):
+        save_button = self.wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR, '.jxPclZ')))
+        save_button.click()
+
+        # Need to wait here for some reason...
+        time.sleep(1)
+        review_button = self.wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,
+                                                                          'button.sc-AxjAm:nth-child(1)')))
+        review_button.click()
+
+        agree_checkbox = self.wait.until(ec.visibility_of_element_located((By.CLASS_NAME, 'input')))
+        agree_checkbox.click()
+
+        confirm_button = self.wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR,
+                                                                           'button.sc-AxjAm:nth-child(1)')))
+        confirm_button.click()
 
     def validate_move(self):
         # We give the application 5 seconds to move to the new page before timing out
