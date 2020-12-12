@@ -1,10 +1,9 @@
-import os
 from twilio.rest import Client
 
 from GLOBALS import TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER
 
 
-class Messaging:
+class Messenger:
 
     def __init__(self):
         self.account_sid = TWILIO_ACCOUNT_SID
