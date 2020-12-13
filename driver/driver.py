@@ -142,3 +142,7 @@ class Driver:
 
         logger.info(f'Successfully navigated from {self.previous_url} to {self.driver.current_url}.')
         self.previous_url = self.driver.current_url
+
+    def close_driver(self):
+        logger.info('Closing the Chrome WebDriver.')
+        self.driver.close()

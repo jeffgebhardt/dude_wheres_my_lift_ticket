@@ -22,3 +22,7 @@ TWILIO_ACCOUNT_SID = os.environ['TWILIO_ACCOUNT_SID']
 TWILIO_AUTH_TOKEN = os.environ['TWILIO_AUTH_TOKEN']
 TWILIO_FROM_NUMBER = '+12058986998'
 TWILIO_TO_NUMBER = '=12539510119'
+
+# Mountains
+
+MOUNTAINS = {'crystal_mountain_resort': 'Crystal Mountain Resort'}
