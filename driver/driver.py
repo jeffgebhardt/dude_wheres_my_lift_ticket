@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 
-from GLOBALS import CHROME_DRIVER_LOCATION, RESERVATION_ATTEMPT_RETRY_INTERVAL_SECONDS
+from GLOBALS import CHROME_DRIVER_LOCATION, RESERVATION_ATTEMPT_RETRY_INTERVAL_SECONDS, CRYSTAL_STARRED
 
 
 class Driver:
@@ -75,19 +75,26 @@ class Driver:
                 pass  # TODO: Implement
 
     def check_availability(self):
-        if self.driver.current_url != 'https://account.ikonpass.com/en/myaccount/add-reservations/':
-            logger.info(f'Current URL must be "https://account.ikonpass.com/en/myaccount/add-reservations/" to proceed '
-                        f'with making reservations, the current URL is "{self.driver.current_url}"')
+        add_reservation_page = 'https://account.ikonpass.com/en/myaccount/add-reservations/'
+
+        if self.driver.current_url != add_reservation_page:
+            logger.info(f'Current URL must be "{add_reservation_page}" to proceed with making reservations, the '
+                        f'current URL is "{self.driver.current_url}"')
 
         # This is the ID of the Crystal Mountain Resort element... TODO: Find a better way to do this.
+        if CRYSTAL_STARRED:
+            crystal_mountain_id = 'react-autowhatever-resort-picker-section-4-item-0'
+        else:
+            crystal_mountain_id = 'react-autowhatever-resort-picker-section-3-item-0'
+
         crystal_mountain_element = self.wait.until(
-            ec.visibility_of_element_located((By.ID, 'react-autowhatever-resort-picker-section-3-item-0')))
+            ec.visibility_of_element_located((By.ID, crystal_mountain_id)))
         crystal_mountain_element.click()
 
         button = self.wait.until(ec.visibility_of_element_located((By.CSS_SELECTOR, 'button.sc-AxjAm')))
         button.click()
 
-        # TODO: Select proper month, right now we are assuming everything will be on the current month...
+        # TODO: Select proper month (Currently reservations can only be made for the current month)
         self.driver.implicitly_wait(1)
         days_elements = self.driver.find_elements_by_class_name('DayPicker-Day')
 
@@ -104,7 +111,6 @@ class Driver:
 
                 # The day is now selected, we just need to save and complete the reservation.
                 self.complete_reservation()
-                self.driver.close()
                 return True
 
         if not able_to_make_reservation:
