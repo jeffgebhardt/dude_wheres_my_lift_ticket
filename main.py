@@ -1,17 +1,23 @@
 import time
+import sys
 
 from driver import driver
 from logger import logger
+from messenger import messenger
 
 from GLOBALS import IKON_LOGIN_URL, \
     IKON_LOGIN_USERNAME, \
     IKON_LOGIN_PASSWORD, \
     RESERVATION_ATTEMPT_RETRY_INTERVAL_SECONDS, \
-    TWILIO_TO_NUMBER, \
-    MOUNTAINS
+    TWILIO_TO_NUMBER
 
-mountain = MOUNTAINS['crystal_mountain_resort']
-reservation_date = 'Dec 26 2020'  # TODO: Update to be dynamic
+mountain = 'crystal_mountain_resort'  # TODO: Make dynamic
+
+if len(sys.argv) != 2:
+    logger.info('Please supply a reservation date.')
+    exit()
+
+reservation_date = sys.argv[1]
 
 logger.info(f'Attempting to make a reservation at "{mountain}" on "{reservation_date}" for user '
             f'"{IKON_LOGIN_USERNAME}".')
@@ -37,7 +43,7 @@ try:
 
         if desired_date_reserved:
             # Send SMS to user
-            messenger = Messenger()
+            messenger = messenger.Messenger()
             message_body = f'Hello from "Dude wheres my lift ticket". We found an available reservation on ' \
                            f'{reservation_date} and reserved it. Shred on!'
             messenger.send_sms(TWILIO_TO_NUMBER, message_body)
